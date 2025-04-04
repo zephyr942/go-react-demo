@@ -1,53 +1,30 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
-	"net/http"
+    "github.com/zephyr942/backend-go/database"
+    "github.com/zephyr942/backend-go/routes"
+
+    "github.com/gin-gonic/gin"
 )
 
-type Task struct {
-	ID   int    `json:"id"`
-	Name string `json:"name"`
-}
-
-var tasks = []Task{
-	{ID: 1, Name: "Sample Task"},
-}
-
 func main() {
-	r := gin.Default()
+    database.Connect() // Connect to MongoDB
 
-	// CORS
-	r.Use(func(c *gin.Context) {
-		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
-		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, DELETE")
-		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-		if c.Request.Method == "OPTIONS" {
-			c.AbortWithStatus(204)
-			return
-		}
-		c.Next()
-	})
+    r := gin.Default()
 
-	r.GET("/tasks", func(c *gin.Context) {
-		c.JSON(http.StatusOK, tasks)
-	})
+    // Enable CORS for frontend access
+    r.Use(func(c *gin.Context) {
+        c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+        c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE")
+        c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+        if c.Request.Method == "OPTIONS" {
+            c.AbortWithStatus(204)
+            return
+        }
+        c.Next()
+    })
 
-	r.POST("/tasks", func(c *gin.Context) {
-		var newTask Task
-		if err := c.ShouldBindJSON(&newTask); err == nil {
-			newTask.ID = len(tasks) + 1
-			tasks = append(tasks, newTask)
-			c.JSON(http.StatusCreated, newTask)
-		} else {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		}
-	})
+    routes.RegisterTodoRoutes(r)
 
-	r.DELETE("/tasks/:id", func(c *gin.Context) {
-		// 删除逻辑可选实现，演示用途可跳过
-		c.Status(http.StatusNoContent)
-	})
-
-	r.Run(":8080") // 默认运行在 localhost:8080
+    r.Run(":8080") // Start server
 }
