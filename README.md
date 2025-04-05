@@ -1,153 +1,182 @@
-# 📝 go-react-demo
+# 📝 Go + React Todo List Tech Demo
 
-A full-stack To-Do List demo using **React (frontend)** + **Go (backend)** + **MongoDB (local)**.  
-This project demonstrates how Go can replace Node.js in a MERN-style stack with a clean architecture and high performance.
+This project demonstrates how to build a simple full-stack Todo List application using **React** (frontend), **Go with Gin** (backend), and **MongoDB** (database). It is created as part of the Tech Demo Assignment for the COMPSCI732 Web Development course.
 
----
-
-## 📌 Project Purpose
-
-This demo is part of a university assignment to explore web technologies beyond the MERN stack. It demonstrates:
-
-- Building a backend API using **Go + Gin**
-- Connecting to a **local MongoDB** database using Go’s native driver
-- Integrating with a **React frontend**
-- Applying **best practices** in project structure and maintainability
+> ✅ This demo is designed for **new learners** and includes simple, clean code with helpful comments.
 
 ---
 
-## ⚙️ Tech Stack
+## 🔧 Tech Stack
 
-| Layer     | Technology              |
-|-----------|--------------------------|
-| Frontend  | React (Vite + Fetch API) |
-| Backend   | Go + Gin (REST API)      |
-| Database  | MongoDB (local)          |
+| Layer      | Tech Used               |
+|------------|-------------------------|
+| Frontend   | React + Vite            |
+| Backend    | Go (Gin framework)      |
+| Database   | MongoDB (local instance)|
 
 ---
 
-## 📁 Folder Structure
-
+## 🗂️ Project Structure
 ```bash
 go-react-demo/
-├── frontend/                 # React client
-│   ├── src/
-│   │   ├── App.jsx
-│   │   ├── App.css
-│   │   └── config.js         # API URL config
-│   └── index.html
+├── backend-go/                 # Go backend
+│   ├── controllers/            # Route handlers (GET, POST, etc.)
+│   ├── models/                 # MongoDB schema (Todo model)
+│   ├── routes/                 # API route registration
+│   ├── database/               # MongoDB connection
+│   └── main.go                 # Entry point of the backend
 │
-└── backend/                  # Go API server
-    ├── main.go               # Entry point
-    ├── database/
-    │   └── connection.go     # MongoDB connection
-    ├── models/
-    │   └── todo_model.go     # Data structure
-    ├── services/
-    │   └── todo_service.go   # DB operations
-    ├── controllers/
-    │   └── todo_controller.go # API logic
-    └── routes/
-        └── todo_routes.go    # Route registration
+├── frontend-react/            # React frontend
+│   └── src/
+│       ├── App.jsx            # Main React component
+│       ├── App.css            # Styling
+│       └── main.jsx           # Vite entry point
+│
+├── index.html
+├── README.md                  # ← You are here
+└── go.mod                     # Go module config
+```
+---
+
+## 🚀 How to Run This Project
+
+### 1️⃣ Prerequisites
+
+To run this project locally, ensure the following are installed and properly set up:
+
+- Go 1.20+ installed
+
+- Node.js + npm installed
+
+- MongoDB running locally (`mongodb://localhost:27017`)
+
+#### ✅ Go 1.20+ installed
+
+- Download: https://go.dev/dl/
+or brew install：
+```bash
+  brew install go
+```
+- Verify installation:
+```bash
+  go version
+```
+#### ✅ Node.js + npm installed (for React frontend)
+- Download: https://nodejs.org/
+or brew install：
+```bash
+  brew install node
+```
+- Verify installation:
+```bash
+node -v
+npm -v
+```
+#### ✅ MongoDB running locally
+Download and install: https://www.mongodb.com/try/download/community
+or brew install：
+```bash
+  brew tap mongodb/brew
+  brew install mongodb-community
+```
+
+Start MongoDB service (Mac example):
+```bash
+brew services start mongodb-community
+```
+
+To stop the service:
+```bash
+brew services stop mongodb-community
+```
+
+To Check MongoDB service status::
+```bash
+brew services list
+```
+
+Connect to the database using the MongoDB shell:
+```bash
+mongosh
+```
+
+Default connection string used in this project:
+```bash
+mmongodb://localhost:27017
+```
+
+Example output when mongosh connects::
+```bash
+Connecting to:          mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.4.2
+Using MongoDB:          7.0.17
+Using Mongosh:          2.4.2
 ```
 
 ---
 
-## 🚀 How to Run
-
-### 1. Start MongoDB (local)
-
-Make sure MongoDB is installed and running at `localhost:27017`.
+### 2️⃣ Start the Backend
 
 ```bash
-brew services start mongodb-community@6.0
-```
-
----
-
-### 2. Start the Go backend
-
-```bash
-cd backend
-go mod tidy
+cd backend-go
 go run main.go
 ```
-
-Expected output:
-
+You should see: ✅ Connected to MongoDB successfully
+```bash
+The backend runs on: http://localhost:8080/api/todos
 ```
-✅ Connected to MongoDB
-[GIN-debug] Listening and serving HTTP on :8080
-```
-
----
-
-### 3. Start the React frontend
+### 3️⃣ Start the Frontend
 
 ```bash
-cd frontend
+cd frontend-react
 npm install
 npm run dev
 ```
-
-Then open [http://localhost:5173](http://localhost:5173) in your browser.
-
----
-
-## 📡 API Endpoints
-
-Base URL: `http://localhost:8080/api/todos`
-
-| Method | Endpoint           | Description         |
-|--------|--------------------|---------------------|
-| GET    | `/api/todos`       | Get all todos       |
-| POST   | `/api/todos`       | Create new todo     |
-| PUT    | `/api/todos/:id`   | Update a todo       |
-| DELETE | `/api/todos/:id`   | Delete a todo       |
-
-### Example JSON:
-
-```json
-{
-  "_id": "ObjectId",
-  "description": "Finish homework",
-  "isComplete": false
-}
+```bash
+The frontend runs on: http://localhost:5173
 ```
 
 ---
 
-## 🔍 MERN vs Go Comparison
+## 🧪 Features:
+ - Add a new todo
 
-| Feature          | MERN (Node.js)            | This Demo (Go)             |
-|------------------|----------------------------|-----------------------------|
-| Backend Language | JavaScript + Express       | Go + Gin                    |
-| Performance      | Async, single-threaded     | Compiled, multi-threaded    |
-| Tooling          | NPM ecosystem              | Strong typing, fast compile |
-| Learning Curve   | Easy for JS developers     | Ideal for backend learners  |
+ - Mark todo as complete/incomplete
 
----
+ - Delete a todo
 
-## ✅ Features Implemented
+ - View live list of todos
 
-- [x] View todo list (GET)
-- [x] Add new todo (POST)
-- [x] Update todo status (PUT)
-- [x] Delete todo (DELETE)
-- [x] React frontend with live update
-- [x] MongoDB storage with persistence
+ - Update todo status in MongoDB
 
 ---
 
-## 🙋 Author
+## 🎥 Demo Video
+👉 The full walkthrough video (15 mins) will be uploaded to Canvas.
+It includes:
 
-Zephyr — COMPSCI732 Tech Demo  
-**Focus**: Exploring Go as a modern backend alternative to Node.js
+ - Architecture explanation
+
+ - Code walkthrough (frontend + backend)
+
+ - Live demo
+
+ - Summary
+
+ ---
+
+## ❗ Notes
+This project is not built for production. It is designed for educational/demo purposes.
+
+MongoDB is assumed to be running locally. If you want to connect to Atlas or Docker, modify the connection string in database/connection.go.
 
 ---
 
-## 📦 Notes
+## 🙋‍♂️ Author
+Zephyr (COMPSCI732 - Tech Demo)\
+UID:bche942
+University of Auckland
 
-- `.gitignore` should include `node_modules` and `dist`
-- Make sure MongoDB is running before starting backend
-- Project emphasizes simplicity, modularity, and clean code for learning
+---
+
+## 📄 License
+MIT License. Use freely for learning and academic purposes.
